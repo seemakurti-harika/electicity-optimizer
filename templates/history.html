@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>History</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-dark bg-dark px-4">
+      <span class="navbar-brand"> Smart Electricity Optimizer </span>
+
+      <a href="/dashboard" class="btn btn-light"> Dashboard </a>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container mt-5">
+      <div class="card shadow p-4">
+        <h2 class="mb-4">Appliance Usage History</h2>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <!-- TABLE HEADER -->
+            <thead class="table-dark">
+              <tr>
+                <th>Appliance</th>
+
+                <th>Power (W)</th>
+
+                <th>Hours Used</th>
+
+                <th>Units</th>
+
+                <th>Estimated Bill</th>
+
+                <th>Status</th>
+
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <!-- TABLE BODY -->
+            <tbody>
+              {% for appliance in appliances %}
+
+              <tr>
+                <!-- APPLIANCE -->
+                <td>{{ appliance['appliance_name'] }}</td>
+
+                <!-- POWER -->
+                <td>{{ appliance['power'] }}</td>
+
+                <!-- HOURS -->
+                <td>{{ appliance['hours'] }}</td>
+
+                <!-- UNITS -->
+                <td>{{ appliance['units'] }}</td>
+
+                <!-- BILL -->
+                <td>₹ {{ appliance['bill'] }}</td>
+
+                <!-- STATUS -->
+                <td>
+                  {% if appliance['units'] > 10 %}
+
+                  <span class="badge bg-danger"> High Usage </span>
+
+                  {% elif appliance['units'] > 5 %}
+
+                  <span class="badge bg-warning text-dark"> Moderate </span>
+
+                  {% else %}
+
+                  <span class="badge bg-success"> Normal </span>
+
+                  {% endif %}
+                </td>
+
+                <!-- ACTION BUTTONS -->
+                <td>
+                  <!-- EDIT -->
+                  <a
+                    href="/edit_appliance/{{ appliance['id'] }}"
+                    class="btn btn-warning btn-sm"
+                  >
+                    Edit
+                  </a>
+
+                  <!-- DELETE -->
+                  <a
+                    href="/delete_appliance/{{ appliance['id'] }}"
+                    class="btn btn-danger btn-sm"
+                  >
+                    Delete
+                  </a>
+                </td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="mt-4">
+          <a href="/add_appliance" class="btn btn-primary"> Add Appliance </a>
+
+          <a href="/download_report" class="btn btn-dark ms-2">
+            Download PDF Report
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
